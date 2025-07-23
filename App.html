@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AI Journaling Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Indie+Flower&family=Quicksand:wght@300..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Default fallback for elements not explicitly styled */
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+            /* Unified Background for the entire website, no blur */
+            background-image: url('Brown Scrapbook Floral Vintage Journal Page.jpg'); /* Ensure this path is correct */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Keeps background fixed while scrolling */
+            color: #333; /* Default text color for overall readability */
+        }
+        /* Fonts for specific elements */
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-indie-flower {
+            font-family: 'Indie Flower', cursive;
+        }
+        .font-quicksand {
+            font-family: 'Quicksand', sans-serif;
+        }
+        .font-open-sans {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        /* Custom scrollbar styles for better aesthetics */
+        .overflow-y-auto::-webkit-scrollbar {
+            width: 8px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Hide default file input button */
+        input[type="file"]::file-selector-button {
+            display: none;
+        }
+
+        /* --- NEW INTRO PAGE STYLES (SCOPED) --- */
+        /* Variables for the new mobile layout */
+        :root {
+            --mobile-width: 325px;
+            --mobile-height: 670px;
+            --mobile-radius: 25px;
+            --separator-height: 500px;
+
+            --bg: transparent; /* Main background for the intro section - handled by body */
+            --mobile-bg: #fdeae6; /* Background for the mobile frame (light pinkish beige) */
+            --intro-bg: #eed7d1; /* Background for the book cover part (slightly darker beige) */
+            --font-color: #807b7b; /* General text color for intro mobile layout */
+
+            --transition: transform 0.7s ease-in-out;
+        }
+
+        .intro-page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Default for mobile: stack vertically */
+            align-items: center; /* Center items horizontally for mobile */
+            justify-content: center; /* Center items vertically for mobile */
+            position: relative; /* Needed for absolute positioning of scroll-down-arrow */
+            color: #4a2c22; /* Text color for the intro section, from image theme */
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5); /* Subtle shadow for readability */
+            padding: 2rem; /* Add some padding around the content */
+        }
+
+        /* Responsive layout for larger screens */
+        @media (min-width: 1024px) { /* For large screens and up (lg:) */
+            .intro-page-container {
+                flex-direction: row; /* Arrange content in a row */
+                justify-content: center; /* Center items horizontally */
+                align-items: center; /* Align items vertically in the center */
+            }
+        }
+
+        .intro-info {
+            font-family: 'Quicksand', sans-serif;
+            font-style: italic;
+            font-size: 26px;
+            margin-top: 10px;
+            color: var(--font-color);
+        }
+
+        .intro-mobile-layout {
+            width: var(--mobile-width);
+            height: var(--mobile-height);
+            margin: 30px 0;
+            border-radius: var(--mobile-radius);
+            perspective: 500px;
+            overflow: hidden;
+            color: var(--font-color);
+            background-color: var(--mobile-bg);
+            box-shadow: 36px 36px 50px 15px #eed7d1d1;
+            position: relative; /* Needed for absolute positioning of children */
+        }
+
+        .intro-mobile-layout .notification-header {
+            position: absolute;
+            top: 5px;
+            width: 100%;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: bold;
+            z-index: 6;
+        }
+
+        .intro-mobile-layout .actions {
+            position: absolute;
+            top: 37px;
+            width: 100%;
+            padding: 50px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            z-index: 6;
+        }
+
+        .intro-mobile-layout .book-cover {
+            position: relative;
+            height: var(--separator-height);
+            width: calc(var(--mobile-width) * 2);
+            left: -52.5%;
+            border-top-left-radius: var(--mobile-radius);
+            border-top-right-radius: var(--mobile-radius);
+            background-color: var(--intro-bg);
+            transform-style: preserve-3d;
+            transform-origin: 50% 40%;
+            transition: var(--transition);
+            z-index: 5; /* Ensure book-cover is above preface for hover */
+            cursor: pointer; /* Visual cue for interactivity */
+        }
+
+        .intro-mobile-layout .book-top {
+            width: 170px;
+            position: absolute;
+            top: 180px;
+            left: 250px;
+            z-index: 5;
+            transform: translateZ(28.5px);
+        }
+
+        .intro-mobile-layout .book-side {
+            position: absolute;
+            top: 430px;
+            left: 222px;
+            transform: translateY(-15px) translateX(0px) translateZ(15px) rotateX(104deg);
+        }
+
+        .intro-mobile-layout .book-cover:hover {
+            transform: rotateX(75deg) translateZ(3px) scale(0.75);
+        }
+
+        .intro-mobile-layout .book-cover:hover + .preface {
+            transform: translateY(-302px);
+        }
+        /* Corrected: Moved .icon rule out of nesting */
+        .intro-mobile-layout .book-cover:hover + .preface .icon {
+            transform: rotateX(180deg);
+        }
+
+        .intro-mobile-layout .preface {
+            height: var(--separator-height);
+            padding: 50px;
+            transition: var(--transition);
+            background: white;
+            position: relative;
+            z-index: 4; /* Ensure preface is below book-cover for hover */
+        }
+
+        .intro-mobile-layout .preface .header {
+            display: flex;
+            align-items: center;
+        }
+
+        .intro-mobile-layout .preface .title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .intro-mobile-layout .preface .author {
+            font-family: 'Open Sans', sans-serif;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .intro-mobile-layout .preface .icon {
+            transform-origin: top;
+            transition: var(--transition);
+        }
+
+        .intro-mobile-layout .preface .body {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .intro-mobile-layout .preface .body p:first-child {
+            margin-bottom: 15px;
+        }
+
+        /* --- SCROLL DOWN ARROW POSITIONING --- */
+        .scroll-down-arrow {
+            position: absolute;
+            bottom: 20px; /* Keep it at the bottom */
+            right: 20px;  /* Position it on the right side */
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Main Journaling Application Section styles */
+        .journal-app-section {
+            /* Background handled by body now */
+            position: relative;
+            min-height: 100vh; /* Ensure it takes full viewport height */
+            /* The padding and flex properties are already on the section element in HTML */
+        }
+        /* Removed .journal-app-overlay as it's no longer needed */
+
+        /* Ensure content is above the background (which is now the body background) */
+        .journal-app-content {
+            position: relative;
+            z-index: 1;
+            /* Flex properties are already on this div in HTML */
+        }
+
+        /* Chapter Details View (Styled as per image reference) */
+        .chapter-card-container {
+            max-width: 500px;
+            margin: auto;
+            background-color: #f7f5f2; /* Light beige background for the card */
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .chapter-card-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .chapter-card-content {
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+        .chapter-card-category {
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            font-family: 'Indie Flower', cursive; /* Apply new font */
+        }
+        .chapter-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #374151;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .chapter-card-date {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            font-family: 'Indie Flower', cursive; /* Apply new font */
+        }
+
+        /* Specific styles for textareas and content displays */
+        #journal-text,
+        #enhanced-text-output,
+        #chapter-original-text,
+        #chapter-d-text {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.2rem; /* Slightly larger for readability */
+            line-height: 1.6;
+            color: #333;
+        }
+        #journal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4a2c22;
+        }
+        /* Adjust background colors for text areas and panels to be solid white for readability */
+        /* Removed bg-opacity-80 from these classes to make them solid white */
+        .flex-1.bg-white.p-6.rounded-2xl.shadow-xl.flex.flex-col.overflow-hidden,
+        .bg-gray-50.p-4.rounded-lg.border.border-gray-200,
+        .bg-blue-50.p-4.rounded-lg.border.border-blue-200 {
+            background-color: white; /* Solid white for clarity over busy background */
+        }
+        .border-gray-200, .border-blue-200 {
+            border-color: rgba(0, 0, 0, 0.1); /* Lighter, subtle border */
+        }
+
+        /* --- CUSTOM STYLES FOR INPUT BLOCKS AND BUTTONS --- */
+
+        /* Increase border size for input blocks */
+        #journal-title,
+        #journal-text,
+        /* Target the actual div containing the displayed text for consistent borders */
+        .bg-gray-50.p-4.rounded-lg.border,
+        .bg-blue-50.p-4.rounded-lg.border {
+            border-width: 2px; /* Increased border size */
+            border-color: #a87f6b; /* A subtle brown for borders */
+        }
+
+        /* Input block focus styles */
+        #journal-title:focus,
+        #journal-text:focus {
+            border-color: #7a5c4e; /* Darker brown on focus */
+            box-shadow: 0 0 0 3px rgba(122, 92, 78, 0.3); /* Subtle brown glow on focus */
+        }
+
+        /* Button styles to match the new aesthetic (ALL BROWN) */
+        .add-image-btn,
+        #enhance-button,
+        #save-button,
+        #clear-button,
+        #clear-image-button,
+        #back-to-editor-button,
+        #show-memories-button,
+        #modal-ok-button /* Added modal button for consistency */
+         {
+            background: linear-gradient(to right, #7a5c4e, #9a7c6e); /* Darker earthy brown */
+            color: white; /* White text for contrast */
+            border: none; /* Remove default button border */
+        }
+
+        .add-image-btn:hover,
+        #enhance-button:hover,
+        #save-button:hover,
+        #clear-button:hover,
+        #clear-image-button:hover,
+        #back-to-editor-button:hover,
+        #show-memories-button:hover,
+        #modal-ok-button:hover {
+            background: linear-gradient(to right, #634b40, #7a5c4e); /* Slightly darker brown on hover */
+        }
+        /* Overriding specific button styles from tailwind if necessary */
+        #enhance-button, #save-button {
+            background: linear-gradient(to right, #7a5c4e, #9a7c6e); /* Apply brown gradient */
+        }
+        #enhance-button:hover, #save-button:hover {
+            background: linear-gradient(to right, #634b40, #7a5c4e); /* Apply darker brown gradient on hover */
+        }
+
+
+        /* Chapter list items */
+        #chapter-list .bg-gray-50 {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white for list items */
+        }
+        #chapter-list .bg-gray-50:hover {
+            background-color: rgba(255, 255, 255, 1); /* Solid white on hover */
+        }
+        #chapter-list .text-brown-700 {
+            color: #4a2c22; /* Dark brown for titles */
+        }
+        #chapter-list .text-gray-500 {
+            color: #807b7b; /* Muted brown for dates */
+        }
+
+        /* --- Memory Box Specific Styles --- */
+        #memory-box-section {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align content to the start of the flex container */
+            border-top: 5px solid #7a5c4e; /* Brown border at the top */
+        }
+
+        #memory-box-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4a2c22;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        #chapter-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsive grid for cards */
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px; /* Max width for the grid */
+            margin-top: 1.5rem;
+            padding-bottom: 2rem; /* Add some padding at the bottom for scrollability */
+        }
+
+        .chapter-list-item {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+            border: 1px solid #e0c7b7; /* Light brown border for each card */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Pushes content and date apart */
+        }
+
+        .chapter-list-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .chapter-list-item img {
+            width: 100%;
+            height: 180px; /* Fixed height for image previews */
+            object-fit: cover;
+            border-bottom: 1px solid #f0e6dd;
+        }
+
+        .chapter-list-item .content {
+            padding: 1rem;
+            flex-grow: 1; /* Allows content to take available space */
+        }
+
+        .chapter-list-item .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #4a2c22;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Limit title to 2 lines */
+            -webkit-box-orient: vertical;
+        }
+
+        .chapter-list-item .date {
+            font-family: 'Indie Flower', cursive;
+            font-size: 0.9rem;
+            color: #807b7b;
+            text-align: right;
+            padding: 0 1rem 1rem 1rem; /* Padding only at bottom and sides */
+            margin-top: auto; /* Pushes date to the bottom */
+        }
+
+        #no-memories-message {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.5rem;
+            color: #807b7b;
+            text-align: center;
+            margin-top: 50px;
+        }
+        /* Style for the "View File" button */
+        .view-file-button {
+            background-color: #8B4513; /* SaddleBrown */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            display: inline-flex; /* Use flex to align icon and text */
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+            margin-bottom: 1rem; /* Added margin-bottom for spacing */
+        }
+        .view-file-button:hover {
+            background-color: #6a340b; /* Darker brown on hover */
+            transform: translateY(-2px);
+        }
+        .view-file-button i {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="message-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+            <p id="modal-message" class="text-gray-800 text-lg mb-4"></p>
+            <button id="modal-ok-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+                OK
+            </button>
+        </div>
+    </div>
+    <section class="intro-page-container" id="home">
+        <button id="show-memories-button" class="absolute top-4 left-4 bg-white bg-opacity-90 text-brown-700 font-bold py-2 px-4 rounded-full shadow-md hover:bg-opacity-100 transition duration-300 ease-in-out z-10 font-playfair">
+            My Memories
+        </button>
+
+        <div class="intro-text-content text-center lg:text-left max-w-md lg:mr-8">
+            <h1 class="text-5xl lg:text-6xl font-playfair font-bold mb-4">Welcome to My Journal</h1>
+            <p class="text-xl lg:text-2xl font-indie-flower italic">Your personal space to capture thoughts, enhance memories, and reflect.</p>
+        </div>
+        <div class="intro-mobile-layout">
+            <div class="notification-header">
+                <div class="time font-open-sans">
+                    9:41
+                </div>
+                <div class="necessities">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+            <div class="actions">
+                <i class="fas fa-chevron-left"></i>
+                <i class="fas fa-bookmark"></i>
+            </div>
+            <div class="book-cover">
+                <img class="book-top" src="https://raw.githubusercontent.com/atomic-variable/images-repo/e37f432405904a280858e5437ce1960753bc78a3/book-top.svg" alt="book-top" />
+                <img class="book-side" src="https://raw.githubusercontent.com/atomic-variable/images-repo/e37f432405904a280858e5437ce1960753bc78a3/book-side.svg" alt="book-side" />
+            </div>
+            <div class="preface">
+                <div class="content">
+                    <div class="header">
+                        <div class="title font-quicksand">The Diary of a Young Girl</div>
+                        <div class="icon">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="author font-open-sans">by Anne Frank</div>
+                    <div class="body font-quicksand">
+                        <p>
+                            also known as The Diary of Anne Frank, is a book of the writings from the Dutch-language diary kept by Anne Frank while she was in hiding for two years with her family during the Nazi occupation of the Netherlands
+                        </p>
+                        <p>
+                            Anne calls her diary "Kitty", so almost all of the letters are written to Kitty.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#journal-app-section" class="scroll-down-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </a>
+    </section>
+
+    <section id="journal-app-section" class="min-h-screen p-4 sm:p-6 flex flex-col lg:flex-row gap-6">
+        <div class="flex-1 bg-black p-6 rounded-2xl shadow-xl flex flex-col overflow-hidden">
+            <h1 id="main-title" class="text-3xl sm:text-4xl font-extrabold text-white mb-6 text-center font-playfair">
+                My Daily Journal
+            </h1>
+
+            <div id="chapter-details-view" class="flex-1 overflow-y-auto pr-2 hidden">
+                <div class="chapter-card-container">
+                    <div id="chapter-image-container" class="chapter-card-image hidden">
+                        <img id="chapter-image" src="" alt="Memory" class="chapter-card-image" onerror="this.onerror=null;this.src='https://placehold.co/500x300/cccccc/333333?text=Image+Not+Found';">
+                    </div>
+                    <div class="chapter-card-content">
+                        <p id="chapter-category" class="chapter-card-category hidden">JOURNAL ENTRY</p>
+                        <h2 id="chapter-title-display" class="chapter-card-title font-playfair"></h2>
+                        <p id="chapter-date-time" class="chapter-card-date"></p>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold text-brown-600 mb-2 font-playfair">Original Entry:</h2>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6 whitespace-pre-wrap">
+                        <p id="chapter-original-text"></p>
+                    </div>
+
+
+                    <h2 class="text-xl font-semibold text-blue-600 mb-2 font-playfair">AI-Enhanced Version:</h2>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6 whitespace-pre-wrap">
+                        <p id="chapter-d-text"></p>
+                    </div>
+                </div>
+                <a id="view-saved-file-button" href="#" target="_blank" class="w-full view-file-button mt-4">
+                    <i class="fas fa-file-alt"></i> View Saved Text File
+                </a>
+
+
+                <button id="back-to-editor-button" class="w-full bg-gradient-to-r from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 mt-4">
+                    ← Back to Journal Editor
+                </button>
+            </div>
+
+            <div id="journal-editor-view" class="flex flex-col lg:flex-row flex-1 gap-6">
+                <div id="image-editor-block" class="lg:w-2/5 flex flex-col items-center p-4 bg-white rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4 font-playfair">Your Photo</h2>
+                    <div id="image-preview-container" class="mb-6 rounded-lg overflow-hidden shadow-md w-full max-w-xs sm:max-w-sm lg:max-w-full hidden">
+                        <img id="image-preview" src="" alt="Selected Memory Preview" class="w-full h-auto object-cover rounded-lg">
+                        <p class="text-sm text-gray-600 mt-2 text-center">
+                            Image Preview
+                        </p>
+                    </div>
+
+                    <label class="w-full cursor-pointer add-image-btn font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center mb-4">
+                        <input
+                            type="file"
+                            id="image-input"
+                            accept="image/*"
+                            class="hidden"
+                        />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-2-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Add Picture
+                    </label>
+                    <button id="clear-image-button" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Clear Image
+                    </button>
+                </div>
+
+                <div id="content-editor-block" class="lg:w-3/5 flex flex-col p-4 bg-white rounded-lg shadow-md">
+                    <input
+                        type="text"
+                        id="journal-title"
+                        class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brown-400 focus:border-transparent placeholder-gray-500 text-lg font-semibold font-playfair"
+                        placeholder="Give your memory a title..."
+                    />
+
+                    <textarea
+                        id="journal-text"
+                        class="w-full flex-1 p-4 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brown-400 focus:border-transparent resize-none placeholder-gray-500 text-lg font-indie-flower"
+                        placeholder="Write about your day, your thoughts, your memories..."
+                        rows="8"
+                    ></textarea>
+
+                    <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                        <button
+                            id="enhance-button"
+                            class="flex-1 bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <svg id="enhance-spinner" class="animate-spin h-5 w-5 mr-3 text-white hidden" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <svg id="enhance-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2zM7.5 10.5h.01M10.5 10.5h.01M13.5 10.5h.01M10.5 14.5h.01M13.5 14.5h.01" />
+                            </svg>
+                            Enhance with AI
+                        </button>
+                        <button
+                            id="save-button"
+                            class="flex-1 bg-gradient-to-r from-brown-500 to-pink-500 hover:from-brown-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-brown-400 focus:ring-opacity-75 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <svg id="save-spinner" class="animate-spin h-5 w-5 mr-3 text-white hidden" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <svg id="save-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                            </svg>
+                            Save Memory
+                        </button>
+                    </div>
+
+                    <button id="clear-button" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2A9 9 0 111 10a9 9 0 0118 0z" />
+                        </svg>
+                        Clear All
+                    </button>
+
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-2 font-playfair">AI Enhanced Version:</h2>
+                        <p id="enhanced-text-output" class="text-lg text-gray-600 whitespace-pre-wrap">
+                            Your enhanced journal will appear here.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+    <section id="memory-box-section" class="min-h-screen p-4 sm:p-6 flex flex-col items-center justify-start">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-brown-700 mb-6 text-center font-playfair">
+            My Memories
+        </h1>
+        <div id="chapter-list" class="w-full max-w-5xl">
+            </div>
+        <p id="no-memories-message" class="text-center text-xl text-gray-600 mt-8 hidden">
+            You haven't saved any memories yet. Start journaling! ✨
+        </p>
+        <button id="back-to-editor-from-memories-button" class="mt-8 bg-gradient-to-r from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">
+            ← Back to Journal Editor
+        </button>
+    </section>
+
+
+    <script>
+        // DOM Elements
+        const journalTitleInput = document.getElementById('journal-title');
+        const journalTextInput = document.getElementById('journal-text');
+        const enhanceButton = document.getElementById('enhance-button');
+        const saveButton = document.getElementById('save-button');
+        const clearButton = document.getElementById('clear-button');
+        const enhancedTextOutput = document.getElementById('enhanced-text-output');
+        const imageInput = document.getElementById('image-input');
+        const imagePreview = document.getElementById('image-preview');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const clearImageButton = document.getElementById('clear-image-button');
+
+        const messageModal = document.getElementById('message-modal');
+        const modalMessage = document.getElementById('modal-message');
+        const modalOkButton = document.getElementById('modal-ok-button');
+
+        const journalEditorView = document.getElementById('journal-editor-view');
+        const chapterDetailsView = document.getElementById('chapter-details-view');
+        const memoryBoxSection = document.getElementById('memory-box-section');
+        const journalAppSection = document.getElementById('journal-app-section');
+        const mainTitle = document.getElementById('main-title'); // For changing title
+
+        const chapterTitleDisplay = document.getElementById('chapter-title-display');
+        const chapterDateDisplay = document.getElementById('chapter-date-time'); // Renamed for clarity
+        const chapterOriginalText = document.getElementById('chapter-original-text'); // Re-enabled reference
+        const chapterEnhancedText = document.getElementById('chapter-d-text'); // Corrected ID from HTML
+        const chapterImage = document.getElementById('chapter-image');
+        const chapterImageContainer = document.getElementById('chapter-image-container');
+        const chapterCategory = document.getElementById('chapter-category'); // Added category element
+        const viewSavedFileButton = document.getElementById('view-saved-file-button'); // Re-enabled reference
+
+        const backToEditorButton = document.getElementById('back-to-editor-button');
+        const showMemoriesButton = document.getElementById('show-memories-button');
+        const backToEditorFromMemoriesButton = document.getElementById('back-to-editor-from-memories-button');
+        const chapterList = document.getElementById('chapter-list');
+        const noMemoriesMessage = document.getElementById('no-memories-message');
+
+        // --- Global State ---
+        let imageDataUrl = null; // Stores the base64 image data
+        const API_BASE_URL = 'http://127.0.0.1:5000'; // Your Flask backend URL
+
+        // --- Helper Functions ---
+
+        function showMessageModal(message) {
+            modalMessage.textContent = message;
+            messageModal.classList.remove('hidden');
+        }
+
+        modalOkButton.addEventListener('click', () => {
+            messageModal.classList.add('hidden');
+        });
+
+        function toggleLoadingState(button, isLoading) {
+            const spinner = button.querySelector('svg.animate-spin');
+            const icon = button.querySelector('svg:not(.animate-spin)'); // Select the regular icon
+
+            if (spinner && icon) { // Ensure elements exist
+                if (isLoading) {
+                    button.disabled = true;
+                    spinner.classList.remove('hidden');
+                    icon.classList.add('hidden');
+                } else {
+                    button.disabled = false;
+                    spinner.classList.add('hidden');
+                    icon.classList.remove('hidden');
+                }
+            } else {
+                console.warn("Loading spinner or icon not found for button:", button);
+            }
+        }
+
+        function clearEditor() {
+            journalTitleInput.value = '';
+            journalTextInput.value = '';
+            enhancedTextOutput.textContent = '';
+            clearImage();
+        }
+
+        function clearImage() {
+            imageInput.value = ''; // Clear file input
+            imagePreview.src = '';
+            imagePreviewContainer.classList.add('hidden');
+            clearImageButton.classList.add('hidden');
+            imageDataUrl = null; // Clear base64 data
+        }
+
+        function showView(viewId) {
+            journalEditorView.classList.add('hidden');
+            chapterDetailsView.classList.add('hidden');
+            memoryBoxSection.classList.add('hidden');
+            journalAppSection.classList.remove('hidden'); // Ensure main app section is visible
+
+            if (viewId === 'editor') {
+                journalEditorView.classList.remove('hidden');
+                mainTitle.textContent = "My Daily Journal";
+            } else if (viewId === 'details') {
+                chapterDetailsView.classList.remove('hidden');
+                mainTitle.textContent = "Memory Details";
+            } else if (viewId === 'memories') {
+                journalAppSection.classList.add('hidden'); // Hide editor/details view
+                memoryBoxSection.classList.remove('hidden');
+            }
+        }
+        // Example from your index.html's loadJournals function
+function displayJournal(journal) {
+    const journalList = document.getElementById('journal-list'); // Assuming you have an element with this ID
+    const journalItem = document.createElement('div');
+    journalItem.className = 'bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 cursor-pointer';
+    // Pass the entire journal object to openJournalDetail
+    journalItem.onclick = () => openJournalDetail(journal);
+
+    journalItem.innerHTML = `
+        <h3 class="font-bold text-lg text-[#4a2c22] mb-2">${journal.title}</h3>
+        <p class="text-sm text-gray-600">${journal.date} ${journal.time}</p>
+        ${journal.imageUrl ? `<img src="${journal.imageUrl}" alt="Memory Image" class="w-full h-32 object-cover rounded-md mt-2">` : ''}
+        <p class="text-gray-700 text-sm mt-2 line-clamp-3">${journal.enhancedText || journal.originalText}</p>
+    `;
+    journalList.appendChild(journalItem);
+}
+
+        // --- Event Listeners ---
+
+        // Introduction page animation
+        const bookCover = document.querySelector('.book-cover');
+        bookCover.addEventListener('click', () => {
+            window.location.href = '#journal-app-section'; // Scroll to the main section
+        });
+
+        modalOkButton.addEventListener('click', () => {
+            messageModal.classList.add('hidden');
+        });
+
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    imageDataUrl = e.target.result; // Store base64 string
+                    imagePreviewContainer.classList.remove('hidden');
+                    clearImageButton.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                clearImage();
+            }
+        });
+
+        clearImageButton.addEventListener('click', clearImage);
+
+        clearButton.addEventListener('click', () => {
+            clearEditor();
+            showMessageModal("Editor cleared! Start a new memory. 😊");
+        });
+
+        // --- API Interactions ---
+
+        // Enhance with AI
+        enhanceButton.addEventListener('click', async () => {
+            const journalText = journalTextInput.value;
+
+            if (!journalText.trim()) {
+                showMessageModal("Please write something in your journal before enhancing!");
+                return;
+            }
+
+            toggleLoadingState(enhanceButton, true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/enhance`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ journalText: journalText }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                }
+
+                enhancedTextOutput.textContent = data.enhancedText;
+                showMessageModal("Journal enhanced successfully! ✨");
+
+            } catch (error) {
+                console.error('Error enhancing journal:', error);
+                showMessageModal(`Error enhancing journal: ${error.message || "Something went wrong."}`);
+                enhancedTextOutput.textContent = "Failed to enhance text. Please try again.";
+            } finally {
+                toggleLoadingState(enhanceButton, false);
+            }
+        });
+
+        // Save Memory
+        saveButton.addEventListener('click', async () => {
+            const title = journalTitleInput.value;
+            const originalText = journalTextInput.value;
+            const enhancedText = enhancedTextOutput.textContent;
+
+            if (!title.trim() || !originalText.trim()) {
+                showMessageModal("Please provide a title and some original text for your memory!");
+                return;
+            }
+
+            toggleLoadingState(saveButton, true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/save_entry`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        originalText: originalText,
+                        enhancedText: enhancedText,
+                        imageUrl: imageDataUrl // Send base64 image data
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                }
+
+                showMessageModal(data.message);
+                clearEditor(); // Clear editor after saving
+
+            } catch (error) {
+                console.error('Error saving memory:', error);
+                showMessageModal(`Error saving memory: ${error.message || "Something went wrong."}`);
+            } finally {
+                toggleLoadingState(saveButton, false);
+            }
+        });
+
+        // Get All Entries / Show Memories
+        showMemoriesButton.addEventListener('click', async () => {
+            await fetchAndDisplayMemories();
+            showView('memories');
+        });
+
+        backToEditorFromMemoriesButton.addEventListener('click', () => {
+            showView('editor');
+            clearEditor(); // Clear editor state when returning
+        });
+
+        backToEditorButton.addEventListener('click', () => {
+            showView('editor');
+            clearEditor(); // Clear editor state when returning
+        });
+
+        async function fetchAndDisplayMemories() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/get_entries`);
+                const memories = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(memories.error || `HTTP error! status: ${response.status}`);
+                }
+
+                chapterList.innerHTML = ''; // Clear previous list
+                if (memories.length === 0) {
+                    noMemoriesMessage.classList.remove('hidden');
+                } else {
+                    noMemoriesMessage.classList.add('hidden');
+                    memories.forEach(memory => {
+                        const memoryCard = document.createElement('div');
+                        memoryCard.classList.add('chapter-list-item');
+                        memoryCard.innerHTML = `
+                            ${memory.imageUrl ? `<img src="${memory.imageUrl}" alt="${memory.title}" loading="lazy">` : ''}
+                            <div class="content">
+                                <div class="title">${memory.title}</div>
+                            </div>
+                            <div class="date">${memory.date} ${memory.time}</div>
+                            ${memory.fileName ? `<a href="${API_BASE_URL}/get_memory_file/${memory.fileName}" class="view-file-button" target="_blank" download="${memory.fileName}"><i class="fas fa-file-download"></i> Download Text File</a>` : ''}
+                        `;
+                        // Keep the primary click action for details view
+                        memoryCard.querySelector('.content').addEventListener('click', () => displayMemoryDetails(memory));
+                        memoryCard.querySelector('.date').addEventListener('click', () => displayMemoryDetails(memory));
+                        if(memory.imageUrl) {
+                            memoryCard.querySelector('img').addEventListener('click', () => displayMemoryDetails(memory));
+                        }
+
+                        // Prevent the download button's click from also triggering the details view
+                        const downloadButton = memoryCard.querySelector('.view-file-button');
+                        if (downloadButton) {
+                            downloadButton.addEventListener('click', (event) => {
+                                event.stopPropagation(); // Stop event from bubbling up to parent (memoryCard)
+                            });
+                        }
+                        chapterList.appendChild(memoryCard);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching memories:', error);
+                showMessageModal(`Error fetching memories: ${error.message || "Something went wrong."}`);
+                noMemoriesMessage.textContent = "Failed to load memories. 💔";
+                noMemoriesMessage.classList.remove('hidden');
+            }
+        }
+
+        // REVERTED displayMemoryDetails function to show all sections
+        function displayMemoryDetails(memory) {
+            chapterTitleDisplay.textContent = memory.title;
+            chapterDateDisplay.textContent = `${memory.date} ${memory.time}`;
+            chapterOriginalText.textContent = memory.originalText; // Re-enabled
+            chapterEnhancedText.textContent = memory.enhancedText || 'No AI enhancement provided.';
+
+            if (memory.imageUrl) {
+                chapterImage.src = memory.imageUrl;
+                chapterImageContainer.classList.remove('hidden');
+            } else {
+                chapterImage.src = '';
+                chapterImageContainer.classList.add('hidden');
+            }
+            chapterCategory.classList.remove('hidden');
+
+
+            // Set the href for the "View Saved File" button
+            if (memory.fileName) {
+                viewSavedFileButton.href = `${API_BASE_URL}/get_memory_file/${memory.fileName}`;
+                viewSavedFileButton.setAttribute('download', memory.fileName); // Suggest download filename
+                viewSavedFileButton.classList.remove('hidden'); // Re-enabled
+            } else {
+                viewSavedFileButton.classList.add('hidden');
+            }
+            chapterOriginalText.parentElement.classList.remove('hidden'); // Ensure original entry is visible
+
+
+            showView('details');
+        }
+        // In your index.html's <script> section
+function openJournalDetail(journal) {
+    // Encode the ID to be safely passed in the URL
+    const encodedId = encodeURIComponent(journal._id);
+    // Open the new page, passing only the ID
+    window.open(`view_downloaded_journal.html?id=${encodedId}`, '_blank');
+}
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            showView('editor');
+        });
+    </script>
+    
+</body>
+<script src="/static/js/script.js"></script>
+</html>
